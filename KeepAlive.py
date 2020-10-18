@@ -34,7 +34,6 @@ with open(path,'r') as file:
     inicioJIVR = configuracion["JIVR"]["inicio"]
     finJIVR = configuracion["JIVR"]["fin"]
     pathAsterisk = configuracion["pathAsterisk"]
-print(mongoURL)
 client = MongoClient(mongoURL)
 db = client[dbName]
 
