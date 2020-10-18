@@ -16,7 +16,7 @@ finJIVR:int = 0
 conexionMysql = {
     host:"",
     user:"",
-    password:""
+    password:"",
     port:0,
     dbName=""
 }
