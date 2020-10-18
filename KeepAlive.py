@@ -38,7 +38,7 @@ db = client[dbName]
 
 while True:
     print("Iniciando ciclo")
-    for x in db.calls.find({"status":0})
+    for x in db.calls.find({"status":0}):
         conexionMysql = pymysql.connect(host=conexionMysql.host, user=conexionMysql.user, passwd=conexionMysql.password, database=conexionMysql.dbName,port=conexionMysql.port)
         cursor = conexionMysql.cursor()
         fecha = datetime.datetime.utcnow()
