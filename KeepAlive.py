@@ -22,7 +22,7 @@ conexionMysql = {
 }
 with open(path,'r') as file:
     configuracion = yaml.load(file, Loader=yaml.FullLoader)
-    mongoURL = "mongodb://"+configuracion["mongo"]["user"]+":"+configuracion["mongo"]["password"]+"@"+configuracion["mongo"]["host"]+":"+str(configuracion["mongo"]["port"])+"/?authSource="+configuracion["mongo"]["database"]
+    mongoURL = "mongodb://"+configuracion["mongo"]["user"]+":"+urllib.quote(configuracion["mongo"]["password"])+"@"+configuracion["mongo"]["host"]+":"+str(configuracion["mongo"]["port"])+"/?authSource="+configuracion["mongo"]["database"]
     dbName = configuracion["mongo"]["database"]
     conexionMysql["host"] = configuracion["mysql"]["host"]
     conexionMysql["user"] = configuracion["mysql"]["user"]
