@@ -58,7 +58,7 @@ while True:
         anteriores = cursor.fetchall()
         for anterior in anteriores:
             idTTS = int(anterior["id"])+1
-        cursor.execute("INSERT INTO tbl_audio (id,aleatorio,voz,mensaje,generado,cpuname) VALUES ("+str(idTTS)+","+str(aleatorio)+",'"+tts+"',0,"+str(cpuname)+")        
+        cursor.execute("INSERT INTO tbl_audio (id,aleatorio,voz,mensaje,generado,cpuname) VALUES ("+str(idTTS)+","+str(aleatorio)+",'"+tts+"',0,"+str(cpuname)+")")
         conexion.commit()
         salir:bool = False
         while not salir:        
