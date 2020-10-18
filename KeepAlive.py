@@ -4,6 +4,7 @@ import datetime
 import time
 import pymysql
 import random
+import urllib
 from pymongo import MongoClient
 
 path:str = "/etc/keyvox/keepalive.yml"
