@@ -18,7 +18,7 @@ conexionMysql = {
     user:"",
     password:"",
     port:0,
-    dbName=""
+    dbName="",
 }
 with open(path,'r') as file:
     configuracion = yaml.load(file, Loader=yaml.FullLoader)
