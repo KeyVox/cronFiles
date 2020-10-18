@@ -14,31 +14,32 @@ voz:str = ""
 inicioJIVR:int = 0
 finJIVR:int = 0
 conexionMysql = {
-    host:"",
-    user:"",
-    password:""
-    port:0,
-    dbName=""
+    "host":"",
+    "user":"",
+    "password":"",
+    "port":0,
+    "dbName":""
 }
 with open(path,'r') as file:
     configuracion = yaml.load(file, Loader=yaml.FullLoader)
-    mongoURL = "mongodb://"+configuracion["mongo"]["user"]+":"+configuracion["mongo"]["password"]+"@"+configuracion["mongo"]["host"]:configuracion["mongo"]["port"]"/?authSource="+configuracion["mongo"]["database"]
+    mongoURL = "mongodb://"+configuracion["mongo"]["user"]+":"+configuracion["mongo"]["password"]+"@"+configuracion["mongo"]["host"]+":"+str(configuracion["mongo"]["port"])+"/?authSource="+configuracion["mongo"]["database"]
     dbName = configuracion["mongo"]["database"]
-    conexionMysql.host = configuracion["mysql"]["host"]
-    conexionMysql.user = configuracion["mysql"]["user"]
-    conexionMysql.password = configuracion["mysql"]["password"]
-    conexionMysql.port = configuracion["mysql"]["port"]
-    conexionMysql.dbName = configuracion["mysql"]["database"]
+    conexionMysql["host"] = configuracion["mysql"]["host"]
+    conexionMysql["user"] = configuracion["mysql"]["user"]
+    conexionMysql["password"] = configuracion["mysql"]["password"]
+    conexionMysql["port"] = configuracion["mysql"]["port"]
+    conexionMysql["dbName"] = configuracion["mysql"]["database"]
     voz = configuracion["idVoz"]
     inicioJIVR = configuracion["JIVR"]["inicio"]
     finJIVR = configuracion["JIVR"]["fin"]
     pathAsterisk = configuracion["pathAsterisk"]
+print(mongoURL)
 client = MongoClient(mongoURL)
 db = client[dbName]
 
 while True:
     print("Iniciando ciclo")
-    for x in db.calls.find({"status":0})
+    for x in db.calls.find({"status":0}):
         conexionMysql = pymysql.connect(host=conexionMysql.host, user=conexionMysql.user, passwd=conexionMysql.password, database=conexionMysql.dbName,port=conexionMysql.port)
         cursor = conexionMysql.cursor()
         fecha = datetime.datetime.utcnow()
@@ -58,7 +59,7 @@ while True:
         anteriores = cursor.fetchall()
         for anterior in anteriores:
             idTTS = int(anterior["id"])+1
-        cursor.execute("INSERT INTO tbl_audio (id,aleatorio,voz,mensaje,generado,cpuname) VALUES ("+str(idTTS)+","+str(aleatorio)+",'"+tts+"',0,"+str(cpuname)+")        
+        cursor.execute("INSERT INTO tbl_audio (id,aleatorio,voz,mensaje,generado,cpuname) VALUES ("+str(idTTS)+","+str(aleatorio)+",'"+tts+"',0,"+str(cpuname)+")")
         conexion.commit()
         salir:bool = False
         while not salir:        
@@ -71,7 +72,7 @@ while True:
         idTTS_str:str = str(idTTS)
         while(len(idTTS_str)<4):
             idTTS_str = "0"+idTTS_str
-        contenidoArchivo:str = "Channel: SIP/DIRECTO/896852"+cliente.phoneNumber+"\nMaxRetries: 2\nCallerid: \"5570991200\"\nRetryTime: 2000\nWaitTime: 30\nArchive: yes\nContext: default\nExtension: 851"+idTTS_str+str(x._id)"\nPriority: 1"
+        contenidoArchivo:str = "Channel: SIP/DIRECTO/896852"+cliente.phoneNumber+"\nMaxRetries: 2\nCallerid: \"5570991200\"\nRetryTime: 2000\nWaitTime: 30\nArchive: yes\nContext: default\nExtension: 851"+idTTS_str+str(x._id)+"\nPriority: 1"
         print("El archivo tiene: %s"+contenidoArchivo)
         with open(pathAsterisk+str(x._id), 'w') as archivoDestino:
             archivoDestino.write(contenidoArchivo)
