@@ -71,7 +71,7 @@ while True:
         idTTS_str:str = str(idTTS)
         while(len(idTTS_str)<4):
             idTTS_str = "0"+idTTS_str
-        contenidoArchivo:str = "Channel: SIP/DIRECTO/896852"+cliente.phoneNumber+"\nMaxRetries: 2\nCallerid: \"5570991200\"\nRetryTime: 2000\nWaitTime: 30\nArchive: yes\nContext: default\nExtension: 851"+idTTS_str+str(x._id)"\nPriority: 1"
+        contenidoArchivo:str = "Channel: SIP/DIRECTO/896852"+cliente.phoneNumber+"\nMaxRetries: 2\nCallerid: \"5570991200\"\nRetryTime: 2000\nWaitTime: 30\nArchive: yes\nContext: default\nExtension: 851"+idTTS_str+str(x._id)+"\nPriority: 1"
         print("El archivo tiene: %s"+contenidoArchivo)
         with open(pathAsterisk+str(x._id), 'w') as archivoDestino:
             archivoDestino.write(contenidoArchivo)
