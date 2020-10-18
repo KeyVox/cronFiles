@@ -5,12 +5,6 @@ import snowboydecoder
 from pymongo import MongoClient
 
 
-def fromBase64ToFile(base64Data, fileDest):
-	chunk = base64.b64decode(base64Data)
-	with open(fileDest, 'wb') as f:
-		f.write(chunk)
-
-
 conn = MongoClient(
     "mongodb:root@password//localhost:27017/?auth=keyvox-test")
 
@@ -18,37 +12,74 @@ keyvox = conn["keyvox-test"]
 
 identificationRequests = keyvox["identificationRequests"]
 activationWords = keyvox["activationWords"]
+files = keyvox["files"]
+
+
+def fromBase64ToFile(base64Data, fileDest):
+    chunk = base64.b64decode(base64Data)
+    with open(fileDest, 'wb') as f:
+        f.write(chunk)
+
+
+def getBase64FromID(ID):
+    return files.find_one({
+        "_id": ID
+    }).value.data
+
+
+def getBase64FromFile(fname):
+    with open(fname) as infile:
+        return base64.b64encode(infile.read())
 
 
 endpoint = "https://snowboy.kitt.ai/api/v1/train/"
 token = "956f276855b6922217e762600143eadc4c1b3797"
-hotword_name = ""
 language = "es"
 
-identDoc = identificationRequests.find_one({
-	status: 0
+hotWord = activationWords.find_one({
+    "status": 0
 })
-activationWords.find_one({
-	_id: identDoc._id
-})
+hotword_name = hotWord.name
+waves = []
+for sample in hotWord.samples:
+    waves.append(getBase64FromID(sample))
 
 data = {
     "name": hotword_name,
-    "language": language,
+    "language": "es",
     "token": token,
     "voice_samples": [
-        {"wave": get_wave(wav1)},
-        {"wave": get_wave(wav2)},
-        {"wave": get_wave(wav3)}
+        {"wave": waves[0]},
+        {"wave": waves[1]},
+        {"wave": waves[2]}
     ]
 }
 response = requests.post(endpoint, json=data)
-   if response.ok:
-        with open(out, "w") as outfile:
-            outfile.write(response.content)
-        print "Saved model to '%s'." % out
-    else:
-        print "Request failed."
-        print response.text
+out = "newModel.pmdl"
+if response.ok:
+    with open(out, "w") as outfile:
+        outfile.write(response.content)
 
-endpoint = "https://snowboy.kitt.ai/api/v1/train/"
+        newFile = files.insert_one({
+            "name": "",
+            "desc": "",
+            "value": {
+                    "data": getBase64FromFile(out),
+                "contentType": "application/octet-stream",
+                "ext": "pmdl"
+            }
+        })
+    activationWords.update_one({"_id": hotWord._id}, {
+        "$set": {
+            "status": "1",
+            "trainingModel": newFile._id
+        }
+    })
+
+
+else:
+    activationWords.update_one({"_id": hotWord._id}, {
+        "$set": {
+            "status": "2"
+        }
+    })
