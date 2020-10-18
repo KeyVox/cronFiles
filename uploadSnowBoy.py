@@ -6,7 +6,7 @@ from pymongo import MongoClient
 
 
 conn = MongoClient(
-    "mongodb:root@password//localhost:27017/?auth=keyvox-test")
+    "mongodb://keyvox-webapp@gy/WilBtFFQouaPYo2OKeg==@104.238.138.234:27017/?authSource=keyvox-test")
 
 keyvox = conn["keyvox-test"]
 
