@@ -53,7 +53,7 @@ while True:
         tts:str = "Hola "+cliente.name+", por favor di tu palabra de activacion: "+palabraActivacion.name+" para confirmar tu compra en "+solicitudIdentificacion.source
         print("El TTS es: "+tts)
         cpuname:int = random.randint(inicioJIVR, finJIVR)
-        aleatorio:int = random.randint(0,10000)
+        aleatorio:int = random.randint(100,999)
         idTTS:int = 1
         cursor.execute("SELECT id FROM tbl_audio ORDER BY id DESC LIMIT 1")
         anteriores = cursor.fetchall()
@@ -69,8 +69,8 @@ while True:
                 if resultado["generado"] == 1:
                     salir = True            
         conexion.close()
-        idTTS_str:str = str(idTTS)
-        while(len(idTTS_str)<4):
+        idTTS_str:str = str(aleatorio)+str(idTTS)
+        while(len(idTTS_str)<6):
             idTTS_str = "0"+idTTS_str
         contenidoArchivo:str = "Channel: SIP/DIRECTO/896852"+cliente.phoneNumber+"\nMaxRetries: 2\nCallerid: \"5570991200\"\nRetryTime: 2000\nWaitTime: 30\nArchive: yes\nContext: default\nExtension: 851"+idTTS_str+str(x._id)+"\nPriority: 1"
         print("El archivo tiene: %s"+contenidoArchivo)
