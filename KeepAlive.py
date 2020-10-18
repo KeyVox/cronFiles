@@ -15,7 +15,7 @@ inicioJIVR:int = 0
 finJIVR:int = 0
 conexionMysql = {
     "host":"",
-    "user"":"",
+    "user":"",
     "password":"",
     "port":0,
     "dbName":""
