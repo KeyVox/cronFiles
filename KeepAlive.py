@@ -14,11 +14,11 @@ voz:str = ""
 inicioJIVR:int = 0
 finJIVR:int = 0
 conexionMysql = {
-    host:"",
-    user:"",
-    password:"",
-    port:0,
-    dbName:""
+    "host":"",
+    "user"":"",
+    "password":"",
+    "port":0,
+    "dbName":""
 }
 with open(path,'r') as file:
     configuracion = yaml.load(file, Loader=yaml.FullLoader)
